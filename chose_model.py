@@ -14,39 +14,6 @@ warnings.filterwarnings('ignore')
 import sys
 import os
 
-# 设置中文字体
-plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei', 'DejaVu Sans']
-plt.rcParams['axes.unicode_minus'] = False
-
-# 确保正确的应用初始化
-def main():
-    # 设置页面配置（必须在其他streamlit调用之前）
-    st.set_page_config(
-        page_title="模型选择应用",
-        page_icon="🤖",
-        layout="wide",
-        initial_sidebar_state="expanded"
-    )
-
-    # 检查session_state是否正确初始化
-    if 'initialized' not in st.session_state:
-        st.session_state.initialized = True
-        st.session_state.user_data = {}
-
-    # 主应用逻辑
-    st.title("模型选择应用")
-    st.write("应用正在运行...")
-
-    # 你的其他代码...
-
-
-# 添加错误处理
-if __name__ == "__main__":
-    try:
-        main()
-    except Exception as e:
-        st.error(f"应用启动错误: {str(e)}")
-        st.info("请刷新页面重试")
 # 设置Matplotlib字体以支持中文显示
 # 对于本地测试，请确保系统安装了SimHei字体。
 # 在某些云环境中，可能需要额外配置字体，否则会回退到默认字体。
@@ -59,7 +26,15 @@ except Exception:
     plt.rcParams['axes.unicode_minus'] = False
 
 # --- Streamlit页面配置 ---
+# This should be the *only* st.set_page_config call
 st.set_page_config(layout="wide", page_title="病例数预测应用")
+
+
+# The main function and the `if __name__ == "__main__":` block are good for structuring,
+# but st.set_page_config must be at the very top of the script's execution flow.
+# You can remove the main() function and the __name__ == "__main__" block
+# if the entire script is meant to be run directly by Streamlit.
+# If you intend to use `main()` for other reasons, ensure st.set_page_config is outside it.
 
 st.title("病例数时间序列预测")
 st.markdown("使用深度学习模型（LSTM, GRU, CNN-LSTM）预测病例数。")
@@ -384,6 +359,7 @@ if train_button:
             current_date_features = future_features_df.iloc[i].copy()
 
             # 更新滞后特征：优先使用已预测的未来值，不足则使用历史值
+            # Ensure proper indexing for negative values, e.g., using max(0, ...)
             current_date_features['y_lag_1'] = temp_future_y_predictions[-1] if i >= 1 else temp_historical_y[-1]
             current_date_features['y_lag_3'] = temp_future_y_predictions[-3] if i >= 3 else temp_historical_y[max(0, len(temp_historical_y)-3)]
             current_date_features['y_lag_7'] = temp_future_y_predictions[-7] if i >= 7 else temp_historical_y[max(0, len(temp_historical_y)-7)]
