@@ -1,7 +1,7 @@
 streamlit==1.30.0
-scipy==1.13.1  # 支持 Python 3.13
-numpy==1.26.4  # 支持 Python 3.13
-pandas==2.2.2  # 支持 Python 3.13
-matplotlib==3.9.2  # 支持 Python 3.13
-scikit-learn==1.5.1  # 支持 Python 3.13
-tensorflow==2.17.0  # 假设 2.17.0 支持 3.13，需确认
+scipy==1.13.0  # 预编译版本，避免 Fortran 依赖
+numpy==1.26.4
+pandas==2.2.2
+matplotlib==3.9.2
+scikit-learn==1.5.1
+tensorflow==2.16.1
