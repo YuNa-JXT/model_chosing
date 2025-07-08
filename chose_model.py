@@ -11,7 +11,42 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 import warnings
 warnings.filterwarnings('ignore')
+import sys
+import os
 
+# 设置中文字体
+plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei', 'DejaVu Sans']
+plt.rcParams['axes.unicode_minus'] = False
+
+# 确保正确的应用初始化
+def main():
+    # 设置页面配置（必须在其他streamlit调用之前）
+    st.set_page_config(
+        page_title="模型选择应用",
+        page_icon="🤖",
+        layout="wide",
+        initial_sidebar_state="expanded"
+    )
+
+    # 检查session_state是否正确初始化
+    if 'initialized' not in st.session_state:
+        st.session_state.initialized = True
+        st.session_state.user_data = {}
+
+    # 主应用逻辑
+    st.title("模型选择应用")
+    st.write("应用正在运行...")
+
+    # 你的其他代码...
+
+
+# 添加错误处理
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        st.error(f"应用启动错误: {str(e)}")
+        st.info("请刷新页面重试")
 # 设置Matplotlib字体以支持中文显示
 # 对于本地测试，请确保系统安装了SimHei字体。
 # 在某些云环境中，可能需要额外配置字体，否则会回退到默认字体。
